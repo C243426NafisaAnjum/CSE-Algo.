@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+struct Item
+{
+    int weight;
+    int value;
+    float ratio;
+};
+
+void sort(struct Item a[], int n)
+{
+    int i, j;
+    struct Item temp;
+
+    for (i = 0; i < n - 1; i++)
+    {
+        for (j = i + 1; j < n; j++)
+        {
+            if (a[i].ratio < a[j].ratio)
+            {
+                temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n, i;
+    float capacity, totalValue = 0.0;
+
+    scanf("%d", &n);
+
+    struct Item a[n];
+
+    for (i = 0; i < n; i++)
+    {
+        scanf("%d %d", &a[i].weight, &a[i].value);
+        a[i].ratio = (float)a[i].value / a[i].weight;
+    }
+
+    scanf("%f", &capacity);
+
+    sort(a, n);
+
+    for (i = 0; i < n; i++)
+    {
+        if (capacity >= a[i].weight)
+        {
+            capacity -= a[i].weight;
+            totalValue += a[i].value;
+        }
+        else
+        {
+            totalValue += a[i].ratio * capacity;
+            break;
+        }
+    }
+
+    printf("Maximum value = %.2f", totalValue);
+
+    return 0;
+}
