@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 100005;
+vector<int> adj[N];
+double dfs(int node, int parent) {
+double sum = 0;
+int child = 0;
+for (int v : adj[node]) {
+if (v == parent)
+continue;
+child++;
+sum += dfs(v, node);
+}
+if (child == 0)
+return 0.0;
+return 1.0 + sum / child;
+}
+int main() {
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+int n;
+cin >> n;
+for (int i = 0; i < n - 1; i++) {
+int u, v;
+cin >> u >> v;
+adj[u].push_back(v);
+
+adj[v].push_back(u);
+}
+cout << fixed << setprecision(10) << dfs(1, 0) << '\n';
+return 0;
+}
