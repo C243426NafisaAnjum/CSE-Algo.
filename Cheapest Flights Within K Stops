@@ -1,0 +1,39 @@
+#include <vector>
+#include <queue>
+#include <climits>
+using namespace std;
+class Solution {
+public:
+int findCheapestPrice(int n, vector<vector<int>>& flights, int src,
+int dst, int k) {
+vector<pair<int, int>> graph[n];
+for (auto flight : flights) {
+graph[flight[0]].push_back({flight[1], flight[2]});
+}
+queue<vector<int>> q;
+q.push({src, 0, 0});
+vector<int> cost(n, INT_MAX);
+cost[src] = 0;
+while (!q.empty()) {
+vector<int> current = q.front();
+q.pop();
+
+int node = current[0];
+int price = current[1];
+int stops = current[2];
+if (stops > k)
+continue;
+for (auto neighbour : graph[node]) {
+int nextNode = neighbour.first;
+int nextPrice = neighbour.second;
+if (price + nextPrice < cost[nextNode]) {
+cost[nextNode] = price + nextPrice;
+q.push({nextNode, cost[nextNode], stops + 1});
+}
+}
+}
+if (cost[dst] == INT_MAX)
+return -1;
+return cost[dst];
+}
+};
